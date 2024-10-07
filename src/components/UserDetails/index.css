@@ -1,0 +1,177 @@
+.user-container {
+  display: flex;
+}
+.dark-card {
+  background-color: #304766;
+  height: 100vh;
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+span-element{
+  font-size:15px;
+  color:grey;
+}
+.confirm{
+  font-size:20px;
+}
+.checkbox-card {
+  display: flex;
+  justify-content: space-around;
+}
+.names-counter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.adults-count {
+  font-size: 25px;
+}
+.countingbutton {
+  border-style: solid;
+  border-width: 0;
+  background-color: transparent;
+  margin: 10px;
+}
+.count-button {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.age-para {
+  font-size: 15px;
+  margin: 5px;
+}
+.age {
+  font-size: 20px;
+  margin: 5px;
+}
+.line {
+  color: grey;
+  width: 1px;
+}
+checkbox-input {
+  margin: 5px;
+  height: 25px;
+}
+.previous-button {
+  background-color: #dbeafe;
+  height: 32px;
+  width: 82px;
+  border-style: solid;
+  border-width: 0;
+  border-radius: 5px;
+  margin: 20px;
+  color: #2563eb;
+}
+.dropdown-card {
+  margin: 20px;
+}
+.label-travel {
+  font-size: 30px;
+}
+.label-check {
+  font-size: 25px;
+}
+.select {
+  height: 40px;
+  width: 20px;
+  border-radius: 10px;
+  border-style: solid;
+}
+.input-card {
+  height: 40px;
+  width: 350px;
+  border-style: solid;
+  border-color: #cbd5e1;
+  border-width: 1;
+  border-radius: 5px;
+  margin: 10px;
+}
+.error-input-card {
+  height: 40px;
+  width: 350px;
+  border-style: solid;
+  border-color: red;
+  border-width: 1;
+  border-radius: 5px;
+  margin: 10px;
+}
+.enter-details-white-card {
+  background-color: #ffffff;
+  background-size: cover;
+  width: 448px;
+  height: 366px;
+  border-style: solid;
+  border-radius: 10px;
+  border-width: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  margin: 20px;
+}
+.white-card {
+  background-color: #ffffff;
+  height: 100vh;
+  width: 30%;
+  padding: 20px;
+}
+.stage {
+  color: #000000;
+  font-size: 24px;
+  font-weight: 500;
+  margin: 5px;
+}
+.number {
+  height: 32px;
+  width: 32px;
+  border-style: solid;
+  border-width: 1;
+  border-color: #cbd5e1;
+  border-radius: 15px;
+  font-size: 20px;
+  font-weight: 600;
+  padding: 5px;
+  margin: 5px;
+}
+.num-stage {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 50px;
+  margin-left: 20px;
+  align-items: center;
+}
+.button-container {
+  text-align: center;
+  margin: 10px;
+}
+.errormsg {
+  color: red;
+  font-size: 15px;
+  margin: 5px;
+}
+.next-button {
+  background-color: #2563eb;
+  height: 32px;
+  width: 56px;
+  color: #ffffff;
+  border-style: solid;
+  border-width: 0;
+  border-radius: 5px;
+  margin: 20px;
+}
+.user-heading {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 24px;
+  margin: 10px;
+}
+.user-para {
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 16px;
+}

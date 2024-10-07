@@ -1,0 +1,31 @@
+.nav-container {
+  background-color: #304766;
+  height: 100px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.nav-heading {
+  color: #ffffff;
+  font-size: 32px;
+  font-weight: 700;
+  font-family: 'Caveat';
+}
+.logout {
+  color: #304766;
+  background-color: #ffffff;
+  border: 0 solid;
+  height: 48px;
+  width: 103px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+.links {
+  display: flex;
+}
+.link {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 400;
+  margin: 10px;
+}
