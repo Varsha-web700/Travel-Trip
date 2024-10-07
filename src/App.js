@@ -15,22 +15,15 @@ const stepsList = [
   {stepId: 'CONFIRMATION', displayText: 'Confirmation'},
 ]
 
-const travelAssistanceList = [
-  {value: 'car', displayText: 'Car'},
-  {value: 'flight', displayText: 'Flight'},
-  {value: 'bus', displayText: 'Bus'},
-  {value: 'train', displayText: 'Train'},
-]
-
 // Replace your code here
 const App = () => (
-  // <Switch>
-  // <Route exact path="/login" component={Login} />
-  // <Route exact path="/" component={Home} />
-  // <Route exact path="/user-details" component={UserDetails} />
-  // <Route component={NotFound} />
-  // </Switch>
-  <UserDetails />
+  <Switch>
+    <Route exact path="/login" component={Login} />
+    <Route exact path="/" component={Home} />
+    <Route exact path="/user-details" component={UserDetails} />
+    <Route component={NotFound} />
+  </Switch>
+  //<UserDetails />
 )
 
 export default App

@@ -97,6 +97,7 @@ class Login extends Component {
                 data-testid="show-password"
                 onClick={this.onClickShow}
                 className="show-button"
+                type = 'button'
               >
                 {showText}
               </button>

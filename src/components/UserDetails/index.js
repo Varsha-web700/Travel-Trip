@@ -1,8 +1,17 @@
 import {Component} from 'react'
 import {Route} from 'react-router-dom'
 import './index.css'
-import {CiCirclePlus, CiCircleMinus} from 'react-icons/ci'
+import {CiCirclePlus} from 'react-icons/ci'
+import {CiCircleMinus} from 'react-icons/ci'
 import Header from '../Header'
+import Footer from '../Footer'
+
+const travelAssistanceList = [
+  {value: 'car', displayText: 'Car'},
+  {value: 'flight', displayText: 'Flight'},
+  {value: 'bus', displayText: 'Bus'},
+  {value: 'train', displayText: 'Train'},
+]
 
 const apiStatusConstants = {
   intial: 'INTIAL',
@@ -10,9 +19,12 @@ const apiStatusConstants = {
   third: 'THIRD',
   fourth: 'FOURTH',
   fifth: 'FIFTH',
+  confirmed: 'CONFIRMED',
 }
 class UserDetails extends Component {
   state = {
+    selectedVehicle: travelAssistanceList[0].value,
+    isInvalid: false,
     name: '',
     endLocation: '',
     startLocation: '',
@@ -41,57 +53,52 @@ class UserDetails extends Component {
   onChangeEnd = event => {
     this.setState({endLocation: event.target.value})
   }
-
   onIncrementAdults = () => {
     const {adults} = this.state
     this.setState(prevState => ({
       adults: prevState.adults + 1,
     }))
   }
-
   onDecrementAdults = () => {
     const {adults} = this.state
     this.setState(prevState => ({
       adults: prevState.adults - 1,
     }))
   }
-
   onIncrementChild = () => {
     const {child} = this.state
     this.setState(prevState => ({
       child: prevState.child + 1,
     }))
   }
-
   onDecrementChild = () => {
     const {child} = this.state
     this.setState(prevState => ({
       child: prevState.child - 1,
     }))
   }
-
   onIncrementInfants = () => {
     const {infants} = this.state
     this.setState(prevState => ({
       infants: prevState.infants + 1,
     }))
   }
-
   onDecrementInfants = () => {
     const {infants} = this.state
     this.setState(prevState => ({
       infants: prevState.infants - 1,
     }))
   }
-
   onChangeStartDate = event => {
-    this.setState({startDate: event.traget.value})
+    this.setState({startDate: event.target.value})
   }
 
   onChangeEndDate = event => {
     this.setState({endDate: event.target.value})
   }
-
+  onChangeVehicle = event => {
+    this.setState({selectedVehicle: event.target.value})
+  }
   onBlurEndDate = () => {
     const {endDate} = this.state
     if (endDate === '') {
@@ -119,26 +126,21 @@ class UserDetails extends Component {
       this.setState({onBlurStart: true})
     }
   }
-
   onChangeAdults = event => {
     this.setState({adults: event.target.value})
   }
-
   onChangeChild = event => {
     this.setState({child: event.target.value})
   }
-
   onBlurEndFun = () => {
     const {endLocation} = this.state
     if (endLocation === '') {
       this.setState({onBlurEnd: true})
     }
   }
-
   previousOfDateSelection = () => {
     this.setState({apiStatus: 'INTIAL'})
   }
-
   onSubmit = event => {
     event.preventDefault()
     const {name, endLocation, startLocation} = this.state
@@ -146,38 +148,40 @@ class UserDetails extends Component {
       this.setState({apiStatus: apiStatusConstants.second})
     }
   }
-
   submitDatesPage = event => {
     event.preventDefault()
     const {endDate, startDate} = this.state
-
-    this.setState({apiStatus: apiStatusConstants.third})
+    const newStartDate = new Date(startDate)
+    const newEndDate = new Date(endDate)
+    if (newEndDate > newStartDate) {
+      this.setState({apiStatus: apiStatusConstants.third, isInvalid: false})
+    } else {
+      this.setState({isInvalid: true})
+    }
   }
-
   onSubmitGuests = event => {
     event.preventDefault()
     this.setState({apiStatus: apiStatusConstants.fourth})
   }
-
   onSubmitTravelAss = event => {
     event.preventDefault()
     this.setState({apiStatus: apiStatusConstants.fifth})
   }
-
+  onSubmitConfirm = event => {
+    event.preventDefault()
+    this.setState({apiStatus: apiStatusConstants.confirmed})
+  }
   prevOfTravelAss = () => {
     this.setState({apiStatus: apiStatusConstants.third})
   }
-
   prevOfGuests = () => {
     this.setState({apiStatus: apiStatusConstants.second})
   }
-
   onClickCheckbox = () => {
     this.setState(prevState => ({
       isCheckboxChecked: !prevState.isCheckboxChecked,
     }))
   }
-
   renderFirstPage = () => {
     const {
       onBlurEnd,
@@ -240,7 +244,8 @@ class UserDetails extends Component {
   }
 
   renderSecondPage = () => {
-    const {startDate, onBlurStartDate, endDate, onBlurEndDate} = this.state
+    const {startDate, onBlurStartDate, endDate, onBlurEndDate, isInvalid} =
+      this.state
     const borderenddate = onBlurEndDate ? 'error-input-card' : 'input-card'
     const borderstartdate = onBlurStartDate ? 'error-input-card' : 'input-card'
     return (
@@ -259,7 +264,7 @@ class UserDetails extends Component {
               className={borderstartdate}
             />
             {onBlurStartDate && <p className="errormsg">Select start date</p>}
-            <label htmlFor="enddt">Start Date</label>
+            <label htmlFor="enddt">End Date</label>
             <input
               onBlur={this.onBlurEndDate}
               value={endDate}
@@ -269,6 +274,11 @@ class UserDetails extends Component {
               className={borderenddate}
             />
             {onBlurEndDate && <p className="errormsg">Select end date</p>}
+            {isInvalid && (
+              <p className="errormsg">
+                The end date cannot be less than the start date
+              </p>
+            )}
             <div>
               <button type="submit" className="next-button">
                 Next
@@ -286,7 +296,6 @@ class UserDetails extends Component {
       </div>
     )
   }
-
   renderThirdPage = () => {
     const {adults, child, infants} = this.state
     return (
@@ -304,11 +313,13 @@ class UserDetails extends Component {
                 <button
                   onClick={this.onIncrementAdults}
                   className="countingbutton"
+                  type="button"
                 >
                   <CiCirclePlus size={60} />
                 </button>
                 <p className="adults-count">{adults}</p>
                 <button
+                  type="button"
                   onClick={this.onDecrementAdults}
                   className="countingbutton"
                 >
@@ -378,9 +389,8 @@ class UserDetails extends Component {
       </div>
     )
   }
-
   renderFourthPage = () => {
-    const {isCheckboxChecked} = this.state
+    const {isCheckboxChecked, selectedVehicle} = this.state
     return (
       <div className="dark-card">
         <h1 className="user-heading">Travel Assistance</h1>
@@ -403,9 +413,15 @@ class UserDetails extends Component {
                 <label className="label-travel" htmlFor="dropdown">
                   Travel Assistance
                 </label>
-                <select>
-                  <option>Car</option>
-                  <option>Bus</option>
+                <br />
+                <select
+                  className="dropdown"
+                  value={selectedVehicle}
+                  onChange={this.onChangeVehicle}
+                >
+                  {travelAssistanceList.map(each => (
+                    <option value={each.value}>{each.displayText}</option>
+                  ))}
                 </select>
               </div>
             )}
@@ -426,7 +442,6 @@ class UserDetails extends Component {
       </div>
     )
   }
-
   renderFifthPage = () => {
     const {
       name,
@@ -443,8 +458,8 @@ class UserDetails extends Component {
       <div className="dark-card">
         <h1 className="user-heading">Confirmation</h1>
         <p className="user-para">Confirm your details</p>
-        <form>
-          <div className="enter-details-white-card">
+        <form onSubmit={this.onSubmitConfirm}>
+          <div className="enter-details-white-card-confirm">
             <h1 className="confirm">
               Name: <span className="span-element">{name}</span>
             </h1>
@@ -465,7 +480,7 @@ class UserDetails extends Component {
               Guests: <span className="span-element">{guests}</span>
             </h1>
             <h1 className="confirm">
-              Travel Assistance: <span className="span-element" />
+              Travel Assistance: <span className="span-element"></span>
             </h1>
             <div>
               <button type="submit" className="next-button">
@@ -480,7 +495,25 @@ class UserDetails extends Component {
       </div>
     )
   }
-
+  renderConfirmedPage = () => {
+    return (
+      <div className="dark-card">
+        <div className="enter-details-white-card">
+          <div className="confirm-button-and-container">
+            <img
+              className="completed-img"
+              src="https://res.cloudinary.com/ddoxcq1ju/image/upload/v1728290074/360_F_303721767_iNO49Cr0bPrcZT9eIuTr0VUa5QXuK1es_ky6hbx.jpg"
+            />
+          </div>
+          <h1 className="confirmed-head">Awsome!</h1>
+          <p className="confirmed-para">Your booking has been confirmed.</p>
+          <div className="confirm-button-and-container">
+            <button className="confirmed-button">Book a New Trip</button>
+          </div>
+        </div>
+      </div>
+    )
+  }
   renderFinal = () => {
     const {apiStatus} = this.state
     switch (apiStatus) {
@@ -494,6 +527,8 @@ class UserDetails extends Component {
         return this.renderFourthPage()
       case apiStatusConstants.fifth:
         return this.renderFifthPage()
+      case apiStatusConstants.confirmed:
+        return this.renderConfirmedPage()
       default:
         return null
     }
@@ -502,31 +537,36 @@ class UserDetails extends Component {
   render() {
     return (
       <>
-        <Header />
-        <div className="user-container">
-          <div className="white-card">
-            <div className="num-stage">
-              <h1 className="number">1</h1>
-              <h1 className="stage">Your Details</h1>
+        <div className="large-devices-ui">
+          <Header />
+          <div className="user-container">
+            <div className="white-card">
+              <div className="num-stage">
+                <h1 className="number">1</h1>
+                <h1 className="stage">Your Details</h1>
+              </div>
+              <div className="num-stage">
+                <h1 className="number">2</h1>
+                <h1 className="stage">Date Selection</h1>
+              </div>
+              <div className="num-stage">
+                <h1 className="number">3</h1>
+                <h1 className="stage">Guests</h1>
+              </div>
+              <div className="num-stage">
+                <h1 className="number">4</h1>
+                <h1 className="stage">Travel Assistence</h1>
+              </div>
+              <div className="num-stage">
+                <h1 className="number">5</h1>
+                <h1 className="stage">Confirmation</h1>
+              </div>
             </div>
-            <div className="num-stage">
-              <h1 className="number">2</h1>
-              <h1 className="stage">Date Selection</h1>
-            </div>
-            <div className="num-stage">
-              <h1 className="number">3</h1>
-              <h1 className="stage">Guests</h1>
-            </div>
-            <div className="num-stage">
-              <h1 className="number">4</h1>
-              <h1 className="stage">Travel Assistence</h1>
-            </div>
-            <div className="num-stage">
-              <h1 className="number">5</h1>
-              <h1 className="stage">Confirmation</h1>
-            </div>
+            {this.renderFinal()}
           </div>
-          {this.renderFinal()}
+        </div>
+        <div className="small-devices-ui">
+          <Footer />
         </div>
       </>
     )
