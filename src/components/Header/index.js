@@ -17,9 +17,11 @@ const Header = props => {
           <Link to="/">
             <h1 className="link">Home</h1>
           </Link>
-          <Link to="/user-details">
+          
+          
             <h1 className="link">My Trips</h1>
-          </Link>
+            
+          
         </div>
         <button className="logout" onClick={onClickLogout}>
           Logout

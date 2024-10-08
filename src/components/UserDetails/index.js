@@ -1,8 +1,7 @@
 import {Component} from 'react'
 import {Route} from 'react-router-dom'
 import './index.css'
-import {CiCirclePlus} from 'react-icons/ci'
-import {CiCircleMinus} from 'react-icons/ci'
+import {CiCirclePlus, CiCircleMinus} from 'react-icons/ci'
 import Header from '../Header'
 import Footer from '../Footer'
 
@@ -30,7 +29,7 @@ class UserDetails extends Component {
     startLocation: '',
     startDate: '',
     endDate: '',
-    adults: 0,
+    adults: 1,
     child: 0,
     infants: 0,
     isCheckboxChecked: false,
@@ -39,6 +38,8 @@ class UserDetails extends Component {
     onBlurName: false,
     onBlurStart: false,
     onBlurEnd: false,
+    //startDateEmpty:false,
+    //endDateEmpty:false,
     apiStatus: apiStatusConstants.intial,
   }
 
@@ -53,42 +54,58 @@ class UserDetails extends Component {
   onChangeEnd = event => {
     this.setState({endLocation: event.target.value})
   }
+
   onIncrementAdults = () => {
     const {adults} = this.state
     this.setState(prevState => ({
       adults: prevState.adults + 1,
     }))
   }
+
   onDecrementAdults = () => {
     const {adults} = this.state
-    this.setState(prevState => ({
+    if(adults > 1){
+      this.setState(prevState => ({
       adults: prevState.adults - 1,
     }))
+    }
+    
   }
+
   onIncrementChild = () => {
     const {child} = this.state
     this.setState(prevState => ({
       child: prevState.child + 1,
     }))
   }
+
   onDecrementChild = () => {
     const {child} = this.state
-    this.setState(prevState => ({
+    if(child > 0){
+     this.setState(prevState => ({
       child: prevState.child - 1,
     }))
+    }
+    
   }
+
   onIncrementInfants = () => {
     const {infants} = this.state
     this.setState(prevState => ({
       infants: prevState.infants + 1,
     }))
   }
+
   onDecrementInfants = () => {
     const {infants} = this.state
-    this.setState(prevState => ({
+    if(infants >0){
+     this.setState(prevState => ({
       infants: prevState.infants - 1,
     }))
+    }
+    
   }
+
   onChangeStartDate = event => {
     this.setState({startDate: event.target.value})
   }
@@ -96,9 +113,11 @@ class UserDetails extends Component {
   onChangeEndDate = event => {
     this.setState({endDate: event.target.value})
   }
+
   onChangeVehicle = event => {
     this.setState({selectedVehicle: event.target.value})
   }
+
   onBlurEndDate = () => {
     const {endDate} = this.state
     if (endDate === '') {
@@ -126,62 +145,117 @@ class UserDetails extends Component {
       this.setState({onBlurStart: true})
     }
   }
+
   onChangeAdults = event => {
     this.setState({adults: event.target.value})
   }
+
   onChangeChild = event => {
     this.setState({child: event.target.value})
   }
+
   onBlurEndFun = () => {
     const {endLocation} = this.state
     if (endLocation === '') {
       this.setState({onBlurEnd: true})
     }
   }
+
   previousOfDateSelection = () => {
     this.setState({apiStatus: 'INTIAL'})
   }
+
   onSubmit = event => {
     event.preventDefault()
     const {name, endLocation, startLocation} = this.state
     if (name !== '' && startLocation !== '' && endLocation !== '') {
-      this.setState({apiStatus: apiStatusConstants.second})
+      this.setState({apiStatus: apiStatusConstants.second,onBlurName:false,onBlurEnd:false,onBlurStart:false})
     }
+    else if(name === ''){
+      this.setState({onBlurName: true})
+    }
+    else if(startLocation === ''){
+      this.setState({onBlurName: false})
+     this.setState({onBlurStart: true})
+    }
+    else if(endLocation === ''){
+      this.setState({onBlurStart: false})
+    this.setState({onBlurEnd: true})
+    }
+    
   }
+
   submitDatesPage = event => {
     event.preventDefault()
     const {endDate, startDate} = this.state
     const newStartDate = new Date(startDate)
     const newEndDate = new Date(endDate)
-    if (newEndDate > newStartDate) {
-      this.setState({apiStatus: apiStatusConstants.third, isInvalid: false})
+    if(startDate == ''){
+      this.setState({onBlurStartDate:true})
+    }
+    else if(endDate === ''){
+      this.setState({onBlurStartDate:false})
+      this.setState({onBlurEndDate:true})
+    }
+    else{
+      if (newEndDate > newStartDate) {
+      this.setState({apiStatus: apiStatusConstants.third, isInvalid: false,onBlurEndDate:false,onBlurStartDate:false})
     } else {
       this.setState({isInvalid: true})
     }
+    }
+      
+    
+    
   }
+
   onSubmitGuests = event => {
     event.preventDefault()
     this.setState({apiStatus: apiStatusConstants.fourth})
   }
+
   onSubmitTravelAss = event => {
     event.preventDefault()
     this.setState({apiStatus: apiStatusConstants.fifth})
   }
+
   onSubmitConfirm = event => {
     event.preventDefault()
     this.setState({apiStatus: apiStatusConstants.confirmed})
   }
+
   prevOfTravelAss = () => {
     this.setState({apiStatus: apiStatusConstants.third})
   }
+
   prevOfGuests = () => {
     this.setState({apiStatus: apiStatusConstants.second})
   }
+
   onClickCheckbox = () => {
     this.setState(prevState => ({
       isCheckboxChecked: !prevState.isCheckboxChecked,
     }))
   }
+ onCancelTrip = () =>{
+  this.setState({apiStatus: apiStatusConstants.intial,
+  selectedVehicle: travelAssistanceList[0].value,
+    isInvalid: false,
+    name: '',
+    endLocation: '',
+    startLocation: '',
+    startDate: '',
+    endDate: '',
+    adults: 1,
+    child: 0,
+    infants: 0,
+    isCheckboxChecked: false,
+    onBlurStartDate: false,
+    onBlurEndDate: false,
+    onBlurName: false,
+    onBlurStart: false,
+    onBlurEnd: false,})
+ }
   renderFirstPage = () => {
     const {
       onBlurEnd,
@@ -296,6 +370,7 @@ class UserDetails extends Component {
       </div>
     )
   }
+
   renderThirdPage = () => {
     const {adults, child, infants} = this.state
     return (
@@ -335,6 +410,7 @@ class UserDetails extends Component {
               </div>
               <div className="count-button">
                 <button
+                  type="button"
                   onClick={this.onIncrementChild}
                   className="countingbutton"
                 >
@@ -342,6 +418,7 @@ class UserDetails extends Component {
                 </button>
                 <p className="adults-count">{child}</p>
                 <button
+                  type="button"
                   onClick={this.onDecrementChild}
                   className="countingbutton"
                 >
@@ -357,6 +434,7 @@ class UserDetails extends Component {
               </div>
               <div className="count-button">
                 <button
+                  type="button"
                   onClick={this.onIncrementInfants}
                   className="countingbutton"
                 >
@@ -364,6 +442,7 @@ class UserDetails extends Component {
                 </button>
                 <p className="adults-count">{infants}</p>
                 <button
+                  type="button"
                   onClick={this.onDecrementInfants}
                   className="countingbutton"
                 >
@@ -389,6 +468,7 @@ class UserDetails extends Component {
       </div>
     )
   }
+
   renderFourthPage = () => {
     const {isCheckboxChecked, selectedVehicle} = this.state
     return (
@@ -442,6 +522,7 @@ class UserDetails extends Component {
       </div>
     )
   }
+
   renderFifthPage = () => {
     const {
       name,
@@ -452,6 +533,7 @@ class UserDetails extends Component {
       adults,
       child,
       infants,
+      selectedVehicle,
     } = this.state
     const guests = adults + child + infants
     return (
@@ -480,7 +562,346 @@ class UserDetails extends Component {
               Guests: <span className="span-element">{guests}</span>
             </h1>
             <h1 className="confirm">
-              Travel Assistance: <span className="span-element"></span>
+              Travel Assistance:{' '}
+              <span className="span-element">{selectedVehicle}</span>
+            </h1>
+            <div>
+              <button type="submit" className="next-button">
+                Confirm
+              </button>
+              <button onClick = {this.onCancelTrip} type="button" className="previous-button">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    )
+  }
+
+  renderConfirmedPage = () => (
+    <div className="dark-card">
+      <div className="enter-details-white-card">
+        <div className="confirm-button-and-container">
+          <img
+            className="completed-img"
+            src="https://res.cloudinary.com/ddoxcq1ju/image/upload/v1728290074/360_F_303721767_iNO49Cr0bPrcZT9eIuTr0VUa5QXuK1es_ky6hbx.jpg"
+          />
+        </div>
+        <h1 className="confirmed-head">Awsome!</h1>
+        <p className="confirmed-para">Your booking has been confirmed.</p>
+        <div className="confirm-button-and-container">
+          <button className="confirmed-button">Book a New Trip</button>
+        </div>
+      </div>
+    </div>
+  )
+
+  // Small Devices Render
+  renderIntialForSmall = () => {
+    const {
+      onBlurEnd,
+      onBlurStart,
+      onBlurName,
+      name,
+      startLocation,
+      endLocation,
+    } = this.state
+    const borderclassName = onBlurName ? 'error-input-card' : 'input-card'
+    const borderclassStart = onBlurStart ? 'error-input-card' : 'input-card'
+    const borderclassEnd = onBlurEnd ? 'error-input-card' : 'input-card'
+    return (
+      <div className="user-container-smalldevice">
+        <h1 className="user-heading-small">Your Details</h1>
+        <p className="user-para-small">Enter your name and location details</p>
+        <form onSubmit={this.onSubmit}>
+          <div className="enter-details-white-card">
+            <label htmlFor="name">Name</label>
+            <input
+              onBlur={this.onBlurNameFun}
+              value={name}
+              onChange={this.onChangeName}
+              type="text"
+              id="name"
+              className={borderclassName}
+            />
+            {onBlurName && <p className="errormsg">Enter your name</p>}
+            <label htmlFor="start">Start Location</label>
+            <input
+              onBlur={this.onBlurStartFun}
+              value={startLocation}
+              onChange={this.onChangeStart}
+              type="text"
+              id="start"
+              className={borderclassStart}
+            />
+            {onBlurStart && (
+              <p className="errormsg">Enter you start location</p>
+            )}
+            <label htmlFor="end">End Location</label>
+            <input
+              onBlur={this.onBlurEndFun}
+              value={endLocation}
+              onChange={this.onChangeEnd}
+              type="text"
+              id="end"
+              className={borderclassEnd}
+            />
+            {onBlurEnd && <p className="errormsg">Enter your end location</p>}
+            <div className="button-container">
+              <button type="submit" className="next-button">
+                Next
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    )
+  }
+  renderSecondForSmall = () => {
+    const {startDate, onBlurStartDate, endDate, onBlurEndDate, isInvalid} =
+      this.state
+    const borderenddate = onBlurEndDate ? 'error-input-card' : 'input-card'
+    const borderstartdate = onBlurStartDate ? 'error-input-card' : 'input-card'
+    return (
+      <div className="user-container-smalldevice">
+        <h1 className="user-heading-small">Date Selection</h1>
+        <p className="user-para-small">Select your Start and End Date.</p>
+        <form onSubmit={this.submitDatesPage}>
+          <div className="enter-details-white-card">
+            <label htmlFor="startdt">Start Date</label>
+            <input
+              onBlur={this.onBlurStartDate}
+              value={startDate}
+              onChange={this.onChangeStartDate}
+              type="date"
+              id="startdt"
+              className={borderstartdate}
+            />
+            {onBlurStartDate && <p className="errormsg">Select start date</p>}
+            <label htmlFor="enddt">End Date</label>
+            <input
+              onBlur={this.onBlurEndDate}
+              value={endDate}
+              onChange={this.onChangeEndDate}
+              type="date"
+              id="enddt"
+              className={borderenddate}
+            />
+            {onBlurEndDate && <p className="errormsg">Select end date</p>}
+            {isInvalid && (
+              <p className="errormsg">
+                The end date cannot be less than the start date
+              </p>
+            )}
+            <div>
+              <button type="submit" className="next-button">
+                Next
+              </button>
+              <button
+                onClick={this.previousOfDateSelection}
+                type="button"
+                className="previous-button"
+              >
+                Previous
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    )
+  }
+  renderThirdForSmall = () => {
+    const {adults, child, infants} = this.state
+    return (
+      <div className="user-container-smalldevice">
+        <h1 className="user-heading-small">Guests</h1>
+        <p className="user-para-small">Select your Guests</p>
+        <form onSubmit={this.onSubmitGuests}>
+          <div className="enter-details-white-card">
+            <div className="names-counter">
+              <div>
+                <h1 className="age">Adults</h1>
+                <p className="age-para">Age 13 or above</p>
+              </div>
+              <div className="count-button">
+                <button
+                  onClick={this.onIncrementAdults}
+                  className="countingbutton"
+                  type="button"
+                >
+                  <CiCirclePlus size={60} />
+                </button>
+                <p className="adults-count">{adults}</p>
+                <button
+                  type="button"
+                  onClick={this.onDecrementAdults}
+                  className="countingbutton"
+                >
+                  <CiCircleMinus size={60} />
+                </button>
+              </div>
+              <hr />
+            </div>
+            <div className="names-counter">
+              <div>
+                <h1 className="age">Children</h1>
+                <p className="age-para">Age 2 to 12</p>
+              </div>
+              <div className="count-button">
+                <button
+                  type="button"
+                  onClick={this.onIncrementChild}
+                  className="countingbutton"
+                >
+                  <CiCirclePlus size={60} />
+                </button>
+                <p className="adults-count">{child}</p>
+                <button
+                  type="button"
+                  onClick={this.onDecrementChild}
+                  className="countingbutton"
+                >
+                  <CiCircleMinus size={60} />
+                </button>
+              </div>
+              <hr />
+            </div>
+            <div className="names-counter">
+              <div>
+                <h1 className="age">Infants</h1>
+                <p className="age-para">Under 2</p>
+              </div>
+              <div className="count-button">
+                <button
+                  type="button"
+                  onClick={this.onIncrementInfants}
+                  className="countingbutton"
+                >
+                  <CiCirclePlus size={60} />
+                </button>
+                <p className="adults-count">{infants}</p>
+                <button
+                  type="button"
+                  onClick={this.onDecrementInfants}
+                  className="countingbutton"
+                >
+                  <CiCircleMinus size={60} />
+                </button>
+              </div>
+              <hr />
+            </div>
+            <div>
+              <button type="submit" className="next-button">
+                Next
+              </button>
+              <button
+                onClick={this.prevOfGuests}
+                type="button"
+                className="previous-button"
+              >
+                Previous
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    )
+  }
+  renderFourthForSmall = () => {
+    const {isCheckboxChecked, selectedVehicle} = this.state
+    return (
+      <div className="user-container-smalldevice">
+        <h1 className="user-heading-small">Travel Assistance</h1>
+        <p className="user-para-small">Select your Travel Assistance.</p>
+        <form onSubmit={this.onSubmitTravelAss}>
+          <div className="enter-details-white-card">
+            <div className="checkbox-card">
+              <label className="label-check" htmlFor="travelAss">
+                Travel Assistance
+              </label>
+              <input
+                onChange={this.onClickCheckbox}
+                type="checkbox"
+                id="travelAss"
+                className="checkbox-input"
+              />
+            </div>
+            {isCheckboxChecked && (
+              <div className="dropdown-card">
+                <label className="label-travel" htmlFor="dropdown">
+                  Travel Assistance
+                </label>
+                <br />
+                <select
+                  className="dropdown"
+                  value={selectedVehicle}
+                  onChange={this.onChangeVehicle}
+                >
+                  {travelAssistanceList.map(each => (
+                    <option value={each.value}>{each.displayText}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+            <div>
+              <button type="submit" className="next-button">
+                Next
+              </button>
+              <button
+                onClick={this.prevOfTravelAss}
+                type="button"
+                className="previous-button"
+              >
+                Previous
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    )
+  }
+  renderFifthForSmall = () => {
+    const {
+      name,
+      startLocation,
+      endLocation,
+      startDate,
+      endDate,
+      adults,
+      child,
+      infants,
+      selectedVehicle,
+    } = this.state
+    const guests = adults + child + infants
+    return (
+      <div className="user-container-smalldevice">
+        <h1 className="user-heading-small">Confirmation</h1>
+        <p className="user-para-small">Confirm your details</p>
+        <form onSubmit={this.onSubmitConfirm}>
+          <div className="enter-details-white-card-confirm">
+            <h1 className="confirm">
+              Name: <span className="span-element">{name}</span>
+            </h1>
+            <h1 className="confirm">
+              Start Location:{' '}
+              <span className="span-element">{startLocation}</span>
+            </h1>
+            <h1 className="confirm">
+              End Location: <span className="span-element">{endLocation}</span>
+            </h1>
+            <h1 className="confirm">
+              Start Date: <span className="span-element">{startDate}</span>
+            </h1>
+            <h1 className="confirm">
+              End Date: <span className="span-element">{endDate}</span>
+            </h1>
+            <h1 className="confirm">
+              Guests: <span className="span-element">{guests}</span>
+            </h1>
+            <h1 className="confirm">
+              Travel Assistance:{' '}
+              <span className="span-element">{selectedVehicle}</span>
             </h1>
             <div>
               <button type="submit" className="next-button">
@@ -495,25 +916,22 @@ class UserDetails extends Component {
       </div>
     )
   }
-  renderConfirmedPage = () => {
+  renderConfirmedForSmall = () => {
     return (
-      <div className="dark-card">
-        <div className="enter-details-white-card">
-          <div className="confirm-button-and-container">
-            <img
-              className="completed-img"
-              src="https://res.cloudinary.com/ddoxcq1ju/image/upload/v1728290074/360_F_303721767_iNO49Cr0bPrcZT9eIuTr0VUa5QXuK1es_ky6hbx.jpg"
-            />
-          </div>
-          <h1 className="confirmed-head">Awsome!</h1>
-          <p className="confirmed-para">Your booking has been confirmed.</p>
-          <div className="confirm-button-and-container">
-            <button className="confirmed-button">Book a New Trip</button>
-          </div>
+      <div className="user-container-smalldevice">
+      <div className="confirm-button-and-container">
+          <img
+            className="completed-img"
+            src="https://res.cloudinary.com/ddoxcq1ju/image/upload/v1728290074/360_F_303721767_iNO49Cr0bPrcZT9eIuTr0VUa5QXuK1es_ky6hbx.jpg"
+          />
+        </div>
+        <h1 className="confirmed-head">Awsome!</h1>
+        <p className="confirmed-para">Your booking has been confirmed.</p>
+        <div className="confirm-button-and-container">
+          <button className="confirmed-button">Book a New Trip</button>
         </div>
       </div>
-    )
-  }
+  )}
   renderFinal = () => {
     const {apiStatus} = this.state
     switch (apiStatus) {
@@ -529,6 +947,26 @@ class UserDetails extends Component {
         return this.renderFifthPage()
       case apiStatusConstants.confirmed:
         return this.renderConfirmedPage()
+      default:
+        return null
+    }
+  }
+
+  renderFinalForSmall = () => {
+    const {apiStatus} = this.state
+    switch (apiStatus) {
+      case apiStatusConstants.intial:
+        return this.renderIntialForSmall()
+      case apiStatusConstants.second:
+        return this.renderSecondForSmall()
+      case apiStatusConstants.third:
+        return this.renderThirdForSmall()
+      case apiStatusConstants.fourth:
+        return this.renderFourthForSmall()
+      case apiStatusConstants.fifth:
+        return this.renderFifthForSmall()
+      case apiStatusConstants.confirmed:
+        return this.renderConfirmedForSmall()
       default:
         return null
     }
@@ -565,8 +1003,13 @@ class UserDetails extends Component {
             {this.renderFinal()}
           </div>
         </div>
+
         <div className="small-devices-ui">
-          <Footer />
+          <div className="user-container-smalldevice">
+            {this.renderFinalForSmall()}
+
+            <Footer />
+          </div>
         </div>
       </>
     )

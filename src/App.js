@@ -23,7 +23,7 @@ const App = () => (
     <Route exact path="/user-details" component={UserDetails} />
     <Route component={NotFound} />
   </Switch>
-  //<UserDetails />
+  // <UserDetails />
 )
 
 export default App

@@ -240,8 +240,28 @@ checkbox-input {
     display: none;
   }
 }
-@media(min-width:768px){
-  .small-devices-ui{
-    display:none;
+.user-container-smalldevice {
+  background-color: #ffffff;
+  height: 100vh;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 20px;
+}
+.user-para-small {
+  color: #5c6777;
+  font-size: 16px;
+  margin: 10px;
+}
+.user-heading-small {
+  color: #334155;
+  font-size: 20px;
+  margin: 10px;
+}
+@media (min-width: 768px) {
+  .small-devices-ui {
+    display: none;
   }
 }
