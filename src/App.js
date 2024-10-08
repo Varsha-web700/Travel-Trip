@@ -2,6 +2,7 @@ import {Switch, Route} from 'react-router-dom'
 import Login from './components/Login'
 import Home from './components/Home'
 import UserDetails from './components/UserDetails'
+import MyTrips from './components/MyTrips'
 import NotFound from './components/NotFound'
 // import Header from './components/Header'
 import './App.css'
@@ -21,6 +22,7 @@ const App = () => (
     <Route exact path="/login" component={Login} />
     <Route exact path="/" component={Home} />
     <Route exact path="/user-details" component={UserDetails} />
+    <Route exact path = '/my-trips' component = {MyTrips}/>
     <Route component={NotFound} />
   </Switch>
   // <UserDetails />

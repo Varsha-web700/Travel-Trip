@@ -4,6 +4,7 @@ import './index.css'
 import {CiCirclePlus, CiCircleMinus} from 'react-icons/ci'
 import Header from '../Header'
 import Footer from '../Footer'
+import MyTrips from '../MyTrips'
 
 const travelAssistanceList = [
   {value: 'car', displayText: 'Car'},
@@ -64,12 +65,11 @@ class UserDetails extends Component {
 
   onDecrementAdults = () => {
     const {adults} = this.state
-    if(adults > 1){
+    if (adults > 1) {
       this.setState(prevState => ({
-      adults: prevState.adults - 1,
-    }))
+        adults: prevState.adults - 1,
+      }))
     }
-    
   }
 
   onIncrementChild = () => {
@@ -81,12 +81,11 @@ class UserDetails extends Component {
 
   onDecrementChild = () => {
     const {child} = this.state
-    if(child > 0){
-     this.setState(prevState => ({
-      child: prevState.child - 1,
-    }))
+    if (child > 0) {
+      this.setState(prevState => ({
+        child: prevState.child - 1,
+      }))
     }
-    
   }
 
   onIncrementInfants = () => {
@@ -98,12 +97,11 @@ class UserDetails extends Component {
 
   onDecrementInfants = () => {
     const {infants} = this.state
-    if(infants >0){
-     this.setState(prevState => ({
-      infants: prevState.infants - 1,
-    }))
+    if (infants > 0) {
+      this.setState(prevState => ({
+        infants: prevState.infants - 1,
+      }))
     }
-    
   }
 
   onChangeStartDate = event => {
@@ -169,20 +167,21 @@ class UserDetails extends Component {
     event.preventDefault()
     const {name, endLocation, startLocation} = this.state
     if (name !== '' && startLocation !== '' && endLocation !== '') {
-      this.setState({apiStatus: apiStatusConstants.second,onBlurName:false,onBlurEnd:false,onBlurStart:false})
-    }
-    else if(name === ''){
+      this.setState({
+        apiStatus: apiStatusConstants.second,
+        onBlurName: false,
+        onBlurEnd: false,
+        onBlurStart: false,
+      })
+    } else if (name === '') {
       this.setState({onBlurName: true})
-    }
-    else if(startLocation === ''){
+    } else if (startLocation === '') {
       this.setState({onBlurName: false})
-     this.setState({onBlurStart: true})
-    }
-    else if(endLocation === ''){
+      this.setState({onBlurStart: true})
+    } else if (endLocation === '') {
       this.setState({onBlurStart: false})
-    this.setState({onBlurEnd: true})
+      this.setState({onBlurEnd: true})
     }
-    
   }
 
   submitDatesPage = event => {
@@ -190,23 +189,23 @@ class UserDetails extends Component {
     const {endDate, startDate} = this.state
     const newStartDate = new Date(startDate)
     const newEndDate = new Date(endDate)
-    if(startDate == ''){
-      this.setState({onBlurStartDate:true})
-    }
-    else if(endDate === ''){
-      this.setState({onBlurStartDate:false})
-      this.setState({onBlurEndDate:true})
-    }
-    else{
-      if (newEndDate > newStartDate) {
-      this.setState({apiStatus: apiStatusConstants.third, isInvalid: false,onBlurEndDate:false,onBlurStartDate:false})
+    if (startDate == '') {
+      this.setState({onBlurStartDate: true})
+    } else if (endDate === '') {
+      this.setState({onBlurStartDate: false})
+      this.setState({onBlurEndDate: true})
     } else {
-      this.setState({isInvalid: true})
+      if (newEndDate > newStartDate) {
+        this.setState({
+          apiStatus: apiStatusConstants.third,
+          isInvalid: false,
+          onBlurEndDate: false,
+          onBlurStartDate: false,
+        })
+      } else {
+        this.setState({isInvalid: true})
+      }
     }
-    }
-      
-    
-    
   }
 
   onSubmitGuests = event => {
@@ -237,25 +236,27 @@ class UserDetails extends Component {
       isCheckboxChecked: !prevState.isCheckboxChecked,
     }))
   }
- onCancelTrip = () =>{
-  this.setState({apiStatus: apiStatusConstants.intial,
-  selectedVehicle: travelAssistanceList[0].value,
-    isInvalid: false,
-    name: '',
-    endLocation: '',
-    startLocation: '',
-    startDate: '',
-    endDate: '',
-    adults: 1,
-    child: 0,
-    infants: 0,
-    isCheckboxChecked: false,
-    onBlurStartDate: false,
-    onBlurEndDate: false,
-    onBlurName: false,
-    onBlurStart: false,
-    onBlurEnd: false,})
- }
+  onCancelTrip = () => {
+    this.setState({
+      apiStatus: apiStatusConstants.intial,
+      selectedVehicle: travelAssistanceList[0].value,
+      isInvalid: false,
+      name: '',
+      endLocation: '',
+      startLocation: '',
+      startDate: '',
+      endDate: '',
+      adults: 1,
+      child: 0,
+      infants: 0,
+      isCheckboxChecked: false,
+      onBlurStartDate: false,
+      onBlurEndDate: false,
+      onBlurName: false,
+      onBlurStart: false,
+      onBlurEnd: false,
+    })
+  }
   renderFirstPage = () => {
     const {
       onBlurEnd,
@@ -569,7 +570,11 @@ class UserDetails extends Component {
               <button type="submit" className="next-button">
                 Confirm
               </button>
-              <button onClick = {this.onCancelTrip} type="button" className="previous-button">
+              <button
+                onClick={this.onCancelTrip}
+                type="button"
+                className="previous-button"
+              >
                 Cancel
               </button>
             </div>
@@ -919,7 +924,7 @@ class UserDetails extends Component {
   renderConfirmedForSmall = () => {
     return (
       <div className="user-container-smalldevice">
-      <div className="confirm-button-and-container">
+        <div className="confirm-button-and-container">
           <img
             className="completed-img"
             src="https://res.cloudinary.com/ddoxcq1ju/image/upload/v1728290074/360_F_303721767_iNO49Cr0bPrcZT9eIuTr0VUa5QXuK1es_ky6hbx.jpg"
@@ -931,7 +936,8 @@ class UserDetails extends Component {
           <button className="confirmed-button">Book a New Trip</button>
         </div>
       </div>
-  )}
+    )
+  }
   renderFinal = () => {
     const {apiStatus} = this.state
     switch (apiStatus) {
@@ -1010,6 +1016,9 @@ class UserDetails extends Component {
 
             <Footer />
           </div>
+        </div>
+        <div className = 'mytrips-component'>
+        <MyTrips/>
         </div>
       </>
     )

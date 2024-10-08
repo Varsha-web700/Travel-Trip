@@ -1,0 +1,70 @@
+.mytrip-card {
+  display: flex;
+  flex-direction: column;
+  margin-top: 200px;
+  align-items: center;
+}
+.heading {
+  color: #334155;
+  font-size: 24px;
+  margin: 10px;
+  font-family: 'Roboto';
+}
+.paragraph {
+  color: grey;
+  font-size: 16px;
+  margin: 10px;
+}
+.image {
+  height: 70px;
+  width: 40px;
+}
+.button {
+  height: 32px;
+  width: 133px;
+  background-color: #2563eb;
+  color: #ffffff;
+  border-style: solid;
+  border-radius: 10px;
+  border-width: 0;
+}
+.small-view-card {
+  display: flex;
+  flex-direction: column;
+  margin-top: 200px;
+  margin-bottom:200px;
+  align-items: center;
+}
+.footer{
+  margin-top:auto;
+}
+
+.small-head {
+  color: #191919;
+  font-size: 16px;
+  margin: 5px;
+}
+.small-para {
+  color: grey;
+  font-size: 14px;
+  margin: 5px;
+}
+.small-button {
+  height: 20px;
+  width: 109px;
+  background-color: #2563eb;
+  border-style: solid;
+  border-radius: 5px;
+  color: #ffffff;
+  border-width: 0;
+}
+@media (max-width: 767px) {
+  .large-devices-view {
+    display: none;
+  }
+}
+@media (min-width: 768px) {
+  .small-devices-view {
+    display: none;
+  }
+}

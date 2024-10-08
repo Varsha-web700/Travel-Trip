@@ -18,14 +18,14 @@ const Footer = props => {
           />
         </button>
       </Link>
-      
-        <button className="footer-button">
-          <img
-            className="footer-suit"
-            src="https://res.cloudinary.com/ddoxcq1ju/image/upload/v1727940920/suitcase-2-line_1_z2cnxz.png"
-          />
-        </button>
-      
+       <Link to = '/my-trips'>
+      <button className="footer-button">
+        <img
+          className="footer-suit"
+          src="https://res.cloudinary.com/ddoxcq1ju/image/upload/v1727940920/suitcase-2-line_1_z2cnxz.png"
+        />
+      </button>
+      </Link>
       <button onClick={onClickLogout} className="footer-button">
         <img
           className="footer-icon"
