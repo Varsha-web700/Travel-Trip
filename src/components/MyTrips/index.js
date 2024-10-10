@@ -1,6 +1,8 @@
+import NewtripContext from '../../context/NewtripContext'
 import {Link} from 'react-router-dom'
 import {Component} from 'react'
 import './index.css'
+import TripItem from '../TripItem'
 import Header from '../Header'
 import Footer from '../Footer'
 
@@ -43,10 +45,22 @@ const MyTrips = () => {
       </>
     )
   }
-  const renderNotEmptyView = () => {
-    return <h1>Not Empty</h1>
-  }
-  return renderEmptyView()
+  const renderNotEmptyView = () => (
+    <NewtripContext.Consumer>
+      {value => {
+        const {tripsList} = value
+        return (
+          <ul>
+            {tripsList.map(each => (
+              <TripItem tripdetails={each} />
+            ))}
+          </ul>
+        )
+      }}
+    </NewtripContext.Consumer>
+  )
+
+  return renderNotEmptyView()
 }
 
 export default MyTrips

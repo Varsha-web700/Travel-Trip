@@ -1,9 +1,11 @@
 import {Switch, Route} from 'react-router-dom'
+import {Component} from 'react'
 import Login from './components/Login'
 import Home from './components/Home'
 import UserDetails from './components/UserDetails'
 import MyTrips from './components/MyTrips'
 import NotFound from './components/NotFound'
+import NewtripContext from './context/NewtripContext'
 // import Header from './components/Header'
 import './App.css'
 
@@ -17,15 +19,30 @@ const stepsList = [
 ]
 
 // Replace your code here
-const App = () => (
-  <Switch>
-    <Route exact path="/login" component={Login} />
-    <Route exact path="/" component={Home} />
-    <Route exact path="/user-details" component={UserDetails} />
-    <Route exact path = '/my-trips' component = {MyTrips}/>
-    <Route component={NotFound} />
-  </Switch>
-  // <UserDetails />
-)
+class App extends Component {
+  state = {tripsList: []}
+  addNewTrip = () => {}
+  deleteTrip = () => {}
+  render() {
+    const {tripsList} = this.state
+    return (
+      <NewtripContext.Provider
+        value={{
+          tripsList,
+          addNewTrip: this.addNewTrip,
+          deleteTrip: this.deleteTrip,
+        }}
+      >
+        <Switch>
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/" component={Home} />
+          <Route exact path="/user-details" component={UserDetails} />
+          <Route exact path="/my-trips" component={MyTrips} />
+          <Route component={NotFound} />
+        </Switch>
+      </NewtripContext.Provider>
+    )
+  }
+}
 
 export default App
