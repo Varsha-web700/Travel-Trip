@@ -1,10 +1,12 @@
 import {Component} from 'react'
 import {Route} from 'react-router-dom'
+import NewtripContext from '../../context/NewtripContext'
 import './index.css'
 import {CiCirclePlus, CiCircleMinus} from 'react-icons/ci'
 import Header from '../Header'
 import Footer from '../Footer'
 import MyTrips from '../MyTrips'
+import {v4} from 'uuid'
 
 const travelAssistanceList = [
   {value: 'car', displayText: 'Car'},
@@ -524,65 +526,85 @@ class UserDetails extends Component {
     )
   }
 
-  renderFifthPage = () => {
-    const {
-      name,
-      startLocation,
-      endLocation,
-      startDate,
-      endDate,
-      adults,
-      child,
-      infants,
-      selectedVehicle,
-    } = this.state
-    const guests = adults + child + infants
-    return (
-      <div className="dark-card">
-        <h1 className="user-heading">Confirmation</h1>
-        <p className="user-para">Confirm your details</p>
-        <form onSubmit={this.onSubmitConfirm}>
-          <div className="enter-details-white-card-confirm">
-            <h1 className="confirm">
-              Name: <span className="span-element">{name}</span>
-            </h1>
-            <h1 className="confirm">
-              Start Location:{' '}
-              <span className="span-element">{startLocation}</span>
-            </h1>
-            <h1 className="confirm">
-              End Location: <span className="span-element">{endLocation}</span>
-            </h1>
-            <h1 className="confirm">
-              Start Date: <span className="span-element">{startDate}</span>
-            </h1>
-            <h1 className="confirm">
-              End Date: <span className="span-element">{endDate}</span>
-            </h1>
-            <h1 className="confirm">
-              Guests: <span className="span-element">{guests}</span>
-            </h1>
-            <h1 className="confirm">
-              Travel Assistance:{' '}
-              <span className="span-element">{selectedVehicle}</span>
-            </h1>
-            <div>
-              <button type="submit" className="next-button">
-                Confirm
-              </button>
-              <button
-                onClick={this.onCancelTrip}
-                type="button"
-                className="previous-button"
-              >
-                Cancel
-              </button>
-            </div>
+  renderFifthPage = () => (
+    <NewtripContext.Consumer>
+      {value => {
+        const {addNewTrip} = value
+        const {
+          name,
+          startLocation,
+          endLocation,
+          startDate,
+          endDate,
+          adults,
+          child,
+          infants,
+          selectedVehicle,
+        } = this.state
+        const guests = adults + child + infants
+        const onConfirmToAdd = () => {
+          const {endLocation, startDate, endDate} = this.state
+          const newTrip = {
+            id: v4(),
+            endLocation: endLocation,
+            startDate: startDate,
+            endDate: endDate,
+          }
+          addNewTrip(newTrip)
+        }
+        return (
+          <div className="dark-card">
+            <h1 className="user-heading">Confirmation</h1>
+            <p className="user-para">Confirm your details</p>
+            <form onSubmit={this.onSubmitConfirm}>
+              <div className="enter-details-white-card-confirm">
+                <h1 className="confirm">
+                  Name: <span className="span-element">{name}</span>
+                </h1>
+                <h1 className="confirm">
+                  Start Location:{' '}
+                  <span className="span-element">{startLocation}</span>
+                </h1>
+                <h1 className="confirm">
+                  End Location:{' '}
+                  <span className="span-element">{endLocation}</span>
+                </h1>
+                <h1 className="confirm">
+                  Start Date: <span className="span-element">{startDate}</span>
+                </h1>
+                <h1 className="confirm">
+                  End Date: <span className="span-element">{endDate}</span>
+                </h1>
+                <h1 className="confirm">
+                  Guests: <span className="span-element">{guests}</span>
+                </h1>
+                <h1 className="confirm">
+                  Travel Assistance:{' '}
+                  <span className="span-element">{selectedVehicle}</span>
+                </h1>
+                <div>
+                  <button
+                    type="submit"
+                    className="next-button"
+                    onClick={onConfirmToAdd}
+                  >
+                    Confirm
+                  </button>
+                  <button
+                    onClick={this.onCancelTrip}
+                    type="button"
+                    className="previous-button"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </form>
           </div>
-        </form>
-      </div>
-    )
-  }
+        )
+      }}
+    </NewtripContext.Consumer>
+  )
 
   renderConfirmedPage = () => (
     <div className="dark-card">
@@ -866,61 +888,81 @@ class UserDetails extends Component {
       </div>
     )
   }
-  renderFifthForSmall = () => {
-    const {
-      name,
-      startLocation,
-      endLocation,
-      startDate,
-      endDate,
-      adults,
-      child,
-      infants,
-      selectedVehicle,
-    } = this.state
-    const guests = adults + child + infants
-    return (
-      <div className="user-container-smalldevice">
-        <h1 className="user-heading-small">Confirmation</h1>
-        <p className="user-para-small">Confirm your details</p>
-        <form onSubmit={this.onSubmitConfirm}>
-          <div className="enter-details-white-card-confirm">
-            <h1 className="confirm">
-              Name: <span className="span-element">{name}</span>
-            </h1>
-            <h1 className="confirm">
-              Start Location:{' '}
-              <span className="span-element">{startLocation}</span>
-            </h1>
-            <h1 className="confirm">
-              End Location: <span className="span-element">{endLocation}</span>
-            </h1>
-            <h1 className="confirm">
-              Start Date: <span className="span-element">{startDate}</span>
-            </h1>
-            <h1 className="confirm">
-              End Date: <span className="span-element">{endDate}</span>
-            </h1>
-            <h1 className="confirm">
-              Guests: <span className="span-element">{guests}</span>
-            </h1>
-            <h1 className="confirm">
-              Travel Assistance:{' '}
-              <span className="span-element">{selectedVehicle}</span>
-            </h1>
-            <div>
-              <button type="submit" className="next-button">
-                Confirm
-              </button>
-              <button type="button" className="previous-button">
-                Cancel
-              </button>
-            </div>
+  renderFifthForSmall = () => (
+    <NewtripContext.Consumer>
+      {value => {
+        const {addNewTrip} = value
+        const {
+          name,
+          startLocation,
+          endLocation,
+          startDate,
+          endDate,
+          adults,
+          child,
+          infants,
+          selectedVehicle,
+        } = this.state
+        const guests = adults + child + infants
+        const onConfirmToAdd = () => {
+          const {endLocation, startDate, endDate} = this.state
+          const newTrip = {
+            id: v4(),
+            endLocation: endLocation,
+            startDate: startDate,
+            endDate: endDate,
+          }
+          addNewTrip(newTrip)
+        }
+        return (
+          <div className="user-container-smalldevice">
+            <h1 className="user-heading-small">Confirmation</h1>
+            <p className="user-para-small">Confirm your details</p>
+            <form onSubmit={this.onSubmitConfirm}>
+              <div className="enter-details-white-card-confirm">
+                <h1 className="confirm">
+                  Name: <span className="span-element">{name}</span>
+                </h1>
+                <h1 className="confirm">
+                  Start Location:{' '}
+                  <span className="span-element">{startLocation}</span>
+                </h1>
+                <h1 className="confirm">
+                  End Location:{' '}
+                  <span className="span-element">{endLocation}</span>
+                </h1>
+                <h1 className="confirm">
+                  Start Date: <span className="span-element">{startDate}</span>
+                </h1>
+                <h1 className="confirm">
+                  End Date: <span className="span-element">{endDate}</span>
+                </h1>
+                <h1 className="confirm">
+                  Guests: <span className="span-element">{guests}</span>
+                </h1>
+                <h1 className="confirm">
+                  Travel Assistance:{' '}
+                  <span className="span-element">{selectedVehicle}</span>
+                </h1>
+                <div>
+                  <button
+                    type="submit"
+                    className="next-button"
+                    onClick={onConfirmToAdd}
+                  >
+                    Confirm
+                  </button>
+                  <button type="button" className="previous-button">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </form>
           </div>
-        </form>
-      </div>
-    )
-  }
+        )
+      }}
+    </NewtripContext.Consumer>
+  )
   renderConfirmedForSmall = () => {
     return (
       <div className="user-container-smalldevice">
@@ -1017,8 +1059,8 @@ class UserDetails extends Component {
             <Footer />
           </div>
         </div>
-        <div className = 'mytrips-component'>
-        <MyTrips/>
+        <div className="mytrips-component">
+          <MyTrips />
         </div>
       </>
     )

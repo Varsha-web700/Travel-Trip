@@ -21,7 +21,9 @@ const stepsList = [
 // Replace your code here
 class App extends Component {
   state = {tripsList: []}
-  addNewTrip = () => {}
+  addNewTrip = (newTrip) => {
+    this.setState(prevState =>({tripsList:[...prevState.tripsList,newTrip]}))
+  }
   deleteTrip = () => {}
   render() {
     const {tripsList} = this.state

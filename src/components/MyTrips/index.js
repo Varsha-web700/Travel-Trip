@@ -6,10 +6,17 @@ import TripItem from '../TripItem'
 import Header from '../Header'
 import Footer from '../Footer'
 
-const MyTrips = () => {
-  const renderEmptyView = () => {
+
+const MyTrips = () => (
+  
+  <NewtripContext.Consumer>
+  {value =>{
+    const{tripsList} = value 
+    const empty = tripsList.length === 0
+    const renderEmptyView = () => {
     return (
       <>
+      
         <div className="large-devices-view">
           <Header />
           <div className="mytrip-card">
@@ -50,17 +57,25 @@ const MyTrips = () => {
       {value => {
         const {tripsList} = value
         return (
-          <ul>
+          <ul className="my-trips-list-container">
             {tripsList.map(each => (
-              <TripItem tripdetails={each} />
+              <TripItem tripdetails={each} key={each.id} />
             ))}
           </ul>
         )
       }}
     </NewtripContext.Consumer>
   )
+  
 
-  return renderNotEmptyView()
-}
+  return (
+    <>
+   {renderEmptyView()}
+   </>
+  )
+  }}
+  </NewtripContext.Consumer>
+
+)
 
 export default MyTrips
