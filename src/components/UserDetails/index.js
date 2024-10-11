@@ -41,8 +41,8 @@ class UserDetails extends Component {
     onBlurName: false,
     onBlurStart: false,
     onBlurEnd: false,
-    //startDateEmpty:false,
-    //endDateEmpty:false,
+    // startDateEmpty:false,
+    // endDateEmpty:false,
     apiStatus: apiStatusConstants.intial,
   }
 
@@ -191,22 +191,20 @@ class UserDetails extends Component {
     const {endDate, startDate} = this.state
     const newStartDate = new Date(startDate)
     const newEndDate = new Date(endDate)
-    if (startDate == '') {
+    if (startDate === '') {
       this.setState({onBlurStartDate: true})
     } else if (endDate === '') {
       this.setState({onBlurStartDate: false})
       this.setState({onBlurEndDate: true})
+    } else if (newEndDate > newStartDate) {
+      this.setState({
+        apiStatus: apiStatusConstants.third,
+        isInvalid: false,
+        onBlurEndDate: false,
+        onBlurStartDate: false,
+      })
     } else {
-      if (newEndDate > newStartDate) {
-        this.setState({
-          apiStatus: apiStatusConstants.third,
-          isInvalid: false,
-          onBlurEndDate: false,
-          onBlurStartDate: false,
-        })
-      } else {
-        this.setState({isInvalid: true})
-      }
+      this.setState({isInvalid: true})
     }
   }
 
@@ -238,6 +236,7 @@ class UserDetails extends Component {
       isCheckboxChecked: !prevState.isCheckboxChecked,
     }))
   }
+
   onCancelTrip = () => {
     this.setState({
       apiStatus: apiStatusConstants.intial,
@@ -259,6 +258,7 @@ class UserDetails extends Component {
       onBlurEnd: false,
     })
   }
+
   renderFirstPage = () => {
     const {
       onBlurEnd,
@@ -546,9 +546,9 @@ class UserDetails extends Component {
           const {endLocation, startDate, endDate} = this.state
           const newTrip = {
             id: v4(),
-            endLocation: endLocation,
-            startDate: startDate,
-            endDate: endDate,
+            endLocation,
+            startDate,
+            endDate,
           }
           addNewTrip(newTrip)
         }
@@ -685,6 +685,7 @@ class UserDetails extends Component {
       </div>
     )
   }
+
   renderSecondForSmall = () => {
     const {startDate, onBlurStartDate, endDate, onBlurEndDate, isInvalid} =
       this.state
@@ -738,6 +739,7 @@ class UserDetails extends Component {
       </div>
     )
   }
+
   renderThirdForSmall = () => {
     const {adults, child, infants} = this.state
     return (
@@ -835,6 +837,7 @@ class UserDetails extends Component {
       </div>
     )
   }
+
   renderFourthForSmall = () => {
     const {isCheckboxChecked, selectedVehicle} = this.state
     return (
@@ -888,6 +891,7 @@ class UserDetails extends Component {
       </div>
     )
   }
+
   renderFifthForSmall = () => (
     <NewtripContext.Consumer>
       {value => {
@@ -908,9 +912,9 @@ class UserDetails extends Component {
           const {endLocation, startDate, endDate} = this.state
           const newTrip = {
             id: v4(),
-            endLocation: endLocation,
-            startDate: startDate,
-            endDate: endDate,
+            endLocation,
+            startDate,
+            endDate,
           }
           addNewTrip(newTrip)
         }
@@ -963,23 +967,23 @@ class UserDetails extends Component {
       }}
     </NewtripContext.Consumer>
   )
-  renderConfirmedForSmall = () => {
-    return (
-      <div className="user-container-smalldevice">
-        <div className="confirm-button-and-container">
-          <img
-            className="completed-img"
-            src="https://res.cloudinary.com/ddoxcq1ju/image/upload/v1728290074/360_F_303721767_iNO49Cr0bPrcZT9eIuTr0VUa5QXuK1es_ky6hbx.jpg"
-          />
-        </div>
-        <h1 className="confirmed-head">Awsome!</h1>
-        <p className="confirmed-para">Your booking has been confirmed.</p>
-        <div className="confirm-button-and-container">
-          <button className="confirmed-button">Book a New Trip</button>
-        </div>
+
+  renderConfirmedForSmall = () => (
+    <div className="user-container-smalldevice">
+      <div className="confirm-button-and-container">
+        <img
+          className="completed-img"
+          src="https://res.cloudinary.com/ddoxcq1ju/image/upload/v1728290074/360_F_303721767_iNO49Cr0bPrcZT9eIuTr0VUa5QXuK1es_ky6hbx.jpg"
+        />
       </div>
-    )
-  }
+      <h1 className="confirmed-head">Awsome!</h1>
+      <p className="confirmed-para">Your booking has been confirmed.</p>
+      <div className="confirm-button-and-container">
+        <button className="confirmed-button">Book a New Trip</button>
+      </div>
+    </div>
+  )
+
   renderFinal = () => {
     const {apiStatus} = this.state
     switch (apiStatus) {

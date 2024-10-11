@@ -30,7 +30,7 @@ class Login extends Component {
       expires: 30,
     })
     history.replace('/')
-    this.setState({username:'',password:''})
+    this.setState({username: '', password: ''})
   }
 
   onSubmitFailure = errorMsg => {
