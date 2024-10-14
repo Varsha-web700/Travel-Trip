@@ -8,6 +8,14 @@ import Footer from '../Footer'
 import MyTrips from '../MyTrips'
 import {v4} from 'uuid'
 
+const stepsList = [
+  {stepId: 'YOUR_DETAILS', displayText: 'Your Details'},
+  {stepId: 'DATE_SELECTION', displayText: 'Date Selection'},
+  {stepId: 'GUESTS', displayText: 'Guests'},
+  {stepId: 'TRAVEL_ASSISTANCE', displayText: 'Travel Assistance'},
+  {stepId: 'CONFIRMATION', displayText: 'Confirmation'},
+]
+
 const travelAssistanceList = [
   {value: 'car', displayText: 'Car'},
   {value: 'flight', displayText: 'Flight'},
@@ -25,7 +33,9 @@ const apiStatusConstants = {
 }
 class UserDetails extends Component {
   state = {
+    activeStep: stepsList[0].stepId,
     selectedVehicle: travelAssistanceList[0].value,
+    isCompleteFilling: false,
     isInvalid: false,
     name: '',
     endLocation: '',
@@ -167,28 +177,27 @@ class UserDetails extends Component {
 
   onSubmit = event => {
     event.preventDefault()
-    const {name, endLocation, startLocation} = this.state
+    const {name, endLocation, startLocation, activeStep} = this.state
     if (name !== '' && startLocation !== '' && endLocation !== '') {
       this.setState({
         apiStatus: apiStatusConstants.second,
         onBlurName: false,
         onBlurEnd: false,
         onBlurStart: false,
+        activeStep: stepsList[1].stepId,
       })
     } else if (name === '') {
       this.setState({onBlurName: true})
     } else if (startLocation === '') {
-      this.setState({onBlurName: false})
       this.setState({onBlurStart: true})
     } else if (endLocation === '') {
-      this.setState({onBlurStart: false})
       this.setState({onBlurEnd: true})
     }
   }
 
   submitDatesPage = event => {
     event.preventDefault()
-    const {endDate, startDate} = this.state
+    const {endDate, startDate, activeStep} = this.state
     const newStartDate = new Date(startDate)
     const newEndDate = new Date(endDate)
     if (startDate === '') {
@@ -202,6 +211,7 @@ class UserDetails extends Component {
         isInvalid: false,
         onBlurEndDate: false,
         onBlurStartDate: false,
+        activeStep: stepsList[2].stepId,
       })
     } else {
       this.setState({isInvalid: true})
@@ -209,18 +219,27 @@ class UserDetails extends Component {
   }
 
   onSubmitGuests = event => {
+    const {activeStep} = this.state
     event.preventDefault()
-    this.setState({apiStatus: apiStatusConstants.fourth})
+    this.setState({
+      apiStatus: apiStatusConstants.fourth,
+      activeStep: stepsList[3].stepId,
+    })
   }
 
   onSubmitTravelAss = event => {
+    const {activeStep} = this.state
     event.preventDefault()
-    this.setState({apiStatus: apiStatusConstants.fifth})
+    this.setState({
+      apiStatus: apiStatusConstants.fifth,
+      activeStep: stepsList[4].stepId,
+    })
   }
 
   onSubmitConfirm = event => {
+    const {activeStep} = this.state
     event.preventDefault()
-    this.setState({apiStatus: apiStatusConstants.confirmed})
+    this.setState({apiStatus: apiStatusConstants.confirmed, activeStep: 'none'})
   }
 
   prevOfTravelAss = () => {
@@ -239,6 +258,7 @@ class UserDetails extends Component {
 
   onCancelOrConfirmTrip = () => {
     this.setState({
+      activeStep: stepsList[0].stepId,
       apiStatus: apiStatusConstants.intial,
       selectedVehicle: travelAssistanceList[0].value,
       isInvalid: false,
@@ -1035,7 +1055,86 @@ class UserDetails extends Component {
   }
 
   render() {
-    const scrollerClassName = 'single-scroller'
+    const {activeStep, apiStatus} = this.state
+    const detailsNumber =
+      activeStep === 'DATE_SELECTION' ? (
+        <img
+          className="finish-logo"
+          src="https://res.cloudinary.com/ddoxcq1ju/image/upload/v1728290074/360_F_303721767_iNO49Cr0bPrcZT9eIuTr0VUa5QXuK1es_ky6hbx.jpg"
+        />
+      ) : (
+        <h1 className="number-details">1</h1>
+      )
+    const dateNumber = activeStep === 'GUESTS' ? (
+        <img
+          className="finish-logo"
+          src="https://res.cloudinary.com/ddoxcq1ju/image/upload/v1728290074/360_F_303721767_iNO49Cr0bPrcZT9eIuTr0VUa5QXuK1es_ky6hbx.jpg"
+        />
+      ) : (
+        <h1 className="number-details">2</h1>
+      )
+    const guestNumber = activeStep === 'TRAVEL_ASSISTANCE' ? (
+        <img
+          className="finish-logo"
+          src="https://res.cloudinary.com/ddoxcq1ju/image/upload/v1728290074/360_F_303721767_iNO49Cr0bPrcZT9eIuTr0VUa5QXuK1es_ky6hbx.jpg"
+        />
+      ) : (
+        <h1 className="number-details">3</h1>
+      )
+    const travelNumber =  activeStep === 'CONFIRMATION'? (
+        <img
+          className="finish-logo"
+          src="https://res.cloudinary.com/ddoxcq1ju/image/upload/v1728290074/360_F_303721767_iNO49Cr0bPrcZT9eIuTr0VUa5QXuK1es_ky6hbx.jpg"
+        />
+      ) : (
+        <h1 className="number-details">4</h1>
+      )
+    const confirmNumber = activeStep === 'none' ? (
+        <img
+          className="finish-logo"
+          src="https://res.cloudinary.com/ddoxcq1ju/image/upload/v1728290074/360_F_303721767_iNO49Cr0bPrcZT9eIuTr0VUa5QXuK1es_ky6hbx.jpg"
+        />
+      ) : (
+        <h1 className="number-details">5</h1>
+      )
+    const detailsNumberClass =
+      activeStep === 'YOUR_DETAILS' ? 'number active-larger' : ''
+    const detailsHeadClass =
+      activeStep === 'YOUR_DETAILS' ? 'stage active-stage' : 'stage'
+    const dateNumberClass =
+      activeStep === 'DATE_SELECTION' ? 'number active-larger' : ''
+    const dateHeadClass =
+      activeStep === 'DATE_SELECTION' ? 'stage active-stage' : 'stage'
+    const guestNumberClass =
+      activeStep === 'GUESTS' ? 'number active-larger' : ''
+    const guestHeadClass =
+      activeStep === 'GUESTS' ? 'stage active-stage' : 'stage'
+    const travelAssNumberClass =
+      activeStep === 'TRAVEL_ASSISTANCE' ? 'number active-larger' : ''
+    const travelAssHeadClass =
+      activeStep === 'TRAVEL_ASSISTANCE' ? 'stage active-stage' : 'stage'
+    const confirmNumberClass =
+      activeStep === 'CONFIRMATION' ? 'number active-larger' : ''
+    const confirmHeadClass =
+      activeStep === 'CONFIRMATION' ? 'stage active-stage' : 'stage'
+    const scrollerYourDetails =
+      activeStep === 'YOUR_DETAILS'
+        ? 'single-scroller active'
+        : 'single-scroller'
+    const scrollerDate =
+      activeStep === 'DATE_SELECTION'
+        ? 'single-scroller active'
+        : 'single-scroller'
+    const scrollGuests =
+      activeStep === 'GUESTS' ? 'single-scroller active' : 'single-scroller'
+    const scrollTravelAss =
+      activeStep === 'TRAVEL_ASSISTANCE'
+        ? 'single-scroller active'
+        : 'single-scroller'
+    const scrollConfirm =
+      activeStep === 'CONFIRMATION'
+        ? 'single-scroller active'
+        : 'single-scroller'
     return (
       <>
         <div className="large-devices-ui">
@@ -1043,24 +1142,24 @@ class UserDetails extends Component {
           <div className="user-container">
             <div className="white-card">
               <div className="num-stage">
-                <h1 className="number">1</h1>
-                <h1 className="stage">Your Details</h1>
+                <div className={detailsNumberClass}>{detailsNumber}</div>
+                <h1 className={detailsHeadClass}>Your Details</h1>
               </div>
               <div className="num-stage">
-                <h1 className="number">2</h1>
-                <h1 className="stage">Date Selection</h1>
+                <div className={dateNumberClass}>{dateNumber}</div>
+                <h1 className={dateHeadClass}>Date Selection</h1>
               </div>
               <div className="num-stage">
-                <h1 className="number">3</h1>
-                <h1 className="stage">Guests</h1>
+                <div className={guestNumberClass}>{guestNumber}</div>
+                <h1 className={guestHeadClass}>Guests</h1>
               </div>
               <div className="num-stage">
-                <h1 className="number">4</h1>
-                <h1 className="stage">Travel Assistence</h1>
+                <div className={travelAssNumberClass}>{travelNumber}</div>
+                <h1 className={travelAssHeadClass}>Travel Assistence</h1>
               </div>
               <div className="num-stage">
-                <h1 className="number">5</h1>
-                <h1 className="stage">Confirmation</h1>
+                <div className={confirmNumberClass}>{confirmNumber}</div>
+                <h1 className={confirmHeadClass}>Confirmation</h1>
               </div>
             </div>
             {this.renderFinal()}
@@ -1069,11 +1168,11 @@ class UserDetails extends Component {
 
         <div className="small-devices-ui">
           <div className="scrollers">
-            <div className={ scrollerClassName}></div>
-            <div className={ scrollerClassName}></div>
-            <div className={ scrollerClassName}></div>
-            <div className={ scrollerClassName}></div>
-            <div className={ scrollerClassName}></div>
+            <div className={scrollerYourDetails}></div>
+            <div className={scrollerDate}></div>
+            <div className={scrollGuests}></div>
+            <div className={scrollTravelAss}></div>
+            <div className={scrollConfirm}></div>
           </div>
           <div className="user-container-smalldevice">
             {this.renderFinalForSmall()}
