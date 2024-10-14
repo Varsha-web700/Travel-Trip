@@ -6,6 +6,7 @@ import UserDetails from './components/UserDetails'
 import MyTrips from './components/MyTrips'
 import NotFound from './components/NotFound'
 import NewtripContext from './context/NewtripContext'
+import ProtectedRoute from './components/ProtectedRoute'
 // import Header from './components/Header'
 import './App.css'
 
@@ -47,10 +48,10 @@ class App extends Component {
       >
         <Switch>
           <Route exact path="/login" component={Login} />
-          <Route exact path="/" component={Home} />
-          <Route exact path="/user-details" component={UserDetails} />
-          <Route exact path="/my-trips" component={MyTrips} />
-          <Route component={NotFound} />
+          <ProtectedRoute exact path="/" component={Home} />
+          <ProtectedRoute exact path="/user-details" component={UserDetails} />
+          <ProtectedRoute exact path="/my-trips" component={MyTrips} />
+          <ProtectedRoute component={NotFound} />
         </Switch>
       </NewtripContext.Provider>
     )

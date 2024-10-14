@@ -31,8 +31,14 @@ const apiStatusConstants = {
   fifth: 'FIFTH',
   confirmed: 'CONFIRMED',
 }
+
 class UserDetails extends Component {
   state = {
+    userDetailsCompleted: false,
+    dateCompleted: false,
+    guestCompleted: false,
+    travelAssCompleted: false,
+    cofirmationCompleted: false,
     activeStep: stepsList[0].stepId,
     selectedVehicle: travelAssistanceList[0].value,
     isCompleteFilling: false,
@@ -177,7 +183,8 @@ class UserDetails extends Component {
 
   onSubmit = event => {
     event.preventDefault()
-    const {name, endLocation, startLocation, activeStep} = this.state
+    const {name, endLocation, startLocation, activeStep, userDetailsCompleted} =
+      this.state
     if (name !== '' && startLocation !== '' && endLocation !== '') {
       this.setState({
         apiStatus: apiStatusConstants.second,
@@ -185,6 +192,7 @@ class UserDetails extends Component {
         onBlurEnd: false,
         onBlurStart: false,
         activeStep: stepsList[1].stepId,
+        userDetailsCompleted: true,
       })
     } else if (name === '') {
       this.setState({onBlurName: true})
@@ -197,7 +205,7 @@ class UserDetails extends Component {
 
   submitDatesPage = event => {
     event.preventDefault()
-    const {endDate, startDate, activeStep} = this.state
+    const {endDate, startDate, activeStep, dateCompleted} = this.state
     const newStartDate = new Date(startDate)
     const newEndDate = new Date(endDate)
     if (startDate === '') {
@@ -212,6 +220,7 @@ class UserDetails extends Component {
         onBlurEndDate: false,
         onBlurStartDate: false,
         activeStep: stepsList[2].stepId,
+        dateCompleted: true,
       })
     } else {
       this.setState({isInvalid: true})
@@ -219,27 +228,33 @@ class UserDetails extends Component {
   }
 
   onSubmitGuests = event => {
-    const {activeStep} = this.state
+    const {activeStep, guestCompleted} = this.state
     event.preventDefault()
     this.setState({
       apiStatus: apiStatusConstants.fourth,
       activeStep: stepsList[3].stepId,
+      guestCompleted: true,
     })
   }
 
   onSubmitTravelAss = event => {
-    const {activeStep} = this.state
+    const {activeStep, travelAssCompleted} = this.state
     event.preventDefault()
     this.setState({
       apiStatus: apiStatusConstants.fifth,
       activeStep: stepsList[4].stepId,
+      travelAssCompleted: true,
     })
   }
 
   onSubmitConfirm = event => {
-    const {activeStep} = this.state
+    const {activeStep, cofirmationCompleted} = this.state
     event.preventDefault()
-    this.setState({apiStatus: apiStatusConstants.confirmed, activeStep: 'none'})
+    this.setState({
+      apiStatus: apiStatusConstants.confirmed,
+      activeStep: 'none',
+      cofirmationCompleted: true,
+    })
   }
 
   prevOfTravelAss = () => {
@@ -258,6 +273,11 @@ class UserDetails extends Component {
 
   onCancelOrConfirmTrip = () => {
     this.setState({
+      userDetailsCompleted: false,
+      dateCompleted: false,
+      guestCompleted: false,
+      travelAssCompleted: false,
+      cofirmationCompleted: false,
       activeStep: stepsList[0].stepId,
       apiStatus: apiStatusConstants.intial,
       selectedVehicle: travelAssistanceList[0].value,
@@ -1055,48 +1075,55 @@ class UserDetails extends Component {
   }
 
   render() {
-    const {activeStep, apiStatus} = this.state
-    const detailsNumber =
-      activeStep === 'DATE_SELECTION' ? (
-        <img
-          className="finish-logo"
-          src="https://res.cloudinary.com/ddoxcq1ju/image/upload/v1728290074/360_F_303721767_iNO49Cr0bPrcZT9eIuTr0VUa5QXuK1es_ky6hbx.jpg"
-        />
-      ) : (
-        <h1 className="number-details">1</h1>
-      )
-    const dateNumber = activeStep === 'GUESTS' ? (
-        <img
-          className="finish-logo"
-          src="https://res.cloudinary.com/ddoxcq1ju/image/upload/v1728290074/360_F_303721767_iNO49Cr0bPrcZT9eIuTr0VUa5QXuK1es_ky6hbx.jpg"
-        />
-      ) : (
-        <h1 className="number-details">2</h1>
-      )
-    const guestNumber = activeStep === 'TRAVEL_ASSISTANCE' ? (
-        <img
-          className="finish-logo"
-          src="https://res.cloudinary.com/ddoxcq1ju/image/upload/v1728290074/360_F_303721767_iNO49Cr0bPrcZT9eIuTr0VUa5QXuK1es_ky6hbx.jpg"
-        />
-      ) : (
-        <h1 className="number-details">3</h1>
-      )
-    const travelNumber =  activeStep === 'CONFIRMATION'? (
-        <img
-          className="finish-logo"
-          src="https://res.cloudinary.com/ddoxcq1ju/image/upload/v1728290074/360_F_303721767_iNO49Cr0bPrcZT9eIuTr0VUa5QXuK1es_ky6hbx.jpg"
-        />
-      ) : (
-        <h1 className="number-details">4</h1>
-      )
-    const confirmNumber = activeStep === 'none' ? (
-        <img
-          className="finish-logo"
-          src="https://res.cloudinary.com/ddoxcq1ju/image/upload/v1728290074/360_F_303721767_iNO49Cr0bPrcZT9eIuTr0VUa5QXuK1es_ky6hbx.jpg"
-        />
-      ) : (
-        <h1 className="number-details">5</h1>
-      )
+    const {
+      activeStep,
+      cofirmationCompleted,
+      apiStatus,
+      userDetailsCompleted,
+      guestCompleted,
+      dateCompleted,
+      travelAssCompleted,
+    } = this.state
+    const detailsNumber = !userDetailsCompleted ? (
+      <h1 className="number-details">1</h1>
+    ) : (
+      <img
+        className="finish-logo"
+        src="https://res.cloudinary.com/ddoxcq1ju/image/upload/v1728290074/360_F_303721767_iNO49Cr0bPrcZT9eIuTr0VUa5QXuK1es_ky6hbx.jpg"
+      />
+    )
+    const dateNumber = !dateCompleted ? (
+      <h1 className="number-details">2</h1>
+    ) : (
+      <img
+        className="finish-logo"
+        src="https://res.cloudinary.com/ddoxcq1ju/image/upload/v1728290074/360_F_303721767_iNO49Cr0bPrcZT9eIuTr0VUa5QXuK1es_ky6hbx.jpg"
+      />
+    )
+    const guestNumber = !guestCompleted ? (
+      <h1 className="number-details">3</h1>
+    ) : (
+      <img
+        className="finish-logo"
+        src="https://res.cloudinary.com/ddoxcq1ju/image/upload/v1728290074/360_F_303721767_iNO49Cr0bPrcZT9eIuTr0VUa5QXuK1es_ky6hbx.jpg"
+      />
+    )
+    const travelNumber = !travelAssCompleted ? (
+      <h1 className="number-details">4</h1>
+    ) : (
+      <img
+        className="finish-logo"
+        src="https://res.cloudinary.com/ddoxcq1ju/image/upload/v1728290074/360_F_303721767_iNO49Cr0bPrcZT9eIuTr0VUa5QXuK1es_ky6hbx.jpg"
+      />
+    )
+    const confirmNumber = !cofirmationCompleted ? (
+      <h1 className="number-details">5</h1>
+    ) : (
+      <img
+        className="finish-logo"
+        src="https://res.cloudinary.com/ddoxcq1ju/image/upload/v1728290074/360_F_303721767_iNO49Cr0bPrcZT9eIuTr0VUa5QXuK1es_ky6hbx.jpg"
+      />
+    )
     const detailsNumberClass =
       activeStep === 'YOUR_DETAILS' ? 'number active-larger' : ''
     const detailsHeadClass =

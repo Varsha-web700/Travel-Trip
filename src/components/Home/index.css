@@ -118,12 +118,12 @@ body {
   align-items: center;
   margin-top: 190px;
 }
-@media (max-width: 576px) {
+@media (max-width: 767px) {
   .App {
     display: none;
   }
 }
-@media (min-width: 577px) {
+@media (min-width: 768px) {
   .trip-container {
     display: none;
   }
