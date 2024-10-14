@@ -12,7 +12,9 @@ const Header = props => {
   return (
     <div>
       <nav className="nav-container">
+      <Link to = '/'>
         <h1 className="nav-heading">Travel Trip</h1>
+        </Link>
         <div className="links">
           <Link to="/">
             <h1 className="link">Home</h1>

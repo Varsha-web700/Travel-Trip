@@ -237,7 +237,7 @@ class UserDetails extends Component {
     }))
   }
 
-  onCancelTrip = () => {
+  onCancelOrConfirmTrip = () => {
     this.setState({
       apiStatus: apiStatusConstants.intial,
       selectedVehicle: travelAssistanceList[0].value,
@@ -591,7 +591,7 @@ class UserDetails extends Component {
                     Confirm
                   </button>
                   <button
-                    onClick={this.onCancelTrip}
+                    onClick={this.onCancelOrConfirmTrip}
                     type="button"
                     className="previous-button"
                   >
@@ -618,7 +618,12 @@ class UserDetails extends Component {
         <h1 className="confirmed-head">Awsome!</h1>
         <p className="confirmed-para">Your booking has been confirmed.</p>
         <div className="confirm-button-and-container">
-          <button className="confirmed-button">Book a New Trip</button>
+          <button
+            className="confirmed-button"
+            onClick={this.onCancelOrConfirmTrip}
+          >
+            Book a New Trip
+          </button>
         </div>
       </div>
     </div>
@@ -979,7 +984,12 @@ class UserDetails extends Component {
       <h1 className="confirmed-head">Awsome!</h1>
       <p className="confirmed-para">Your booking has been confirmed.</p>
       <div className="confirm-button-and-container">
-        <button className="confirmed-button">Book a New Trip</button>
+        <button
+          className="confirmed-button"
+          onClick={this.onCancelOrConfirmTrip}
+        >
+          Book a New Trip
+        </button>
       </div>
     </div>
   )
@@ -1025,6 +1035,7 @@ class UserDetails extends Component {
   }
 
   render() {
+    const scrollerClassName = 'single-scroller'
     return (
       <>
         <div className="large-devices-ui">
@@ -1057,6 +1068,13 @@ class UserDetails extends Component {
         </div>
 
         <div className="small-devices-ui">
+          <div className="scrollers">
+            <div className={ scrollerClassName}></div>
+            <div className={ scrollerClassName}></div>
+            <div className={ scrollerClassName}></div>
+            <div className={ scrollerClassName}></div>
+            <div className={ scrollerClassName}></div>
+          </div>
           <div className="user-container-smalldevice">
             {this.renderFinalForSmall()}
 

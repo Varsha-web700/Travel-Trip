@@ -20,23 +20,25 @@ const stepsList = [
 
 // Replace your code here
 class App extends Component {
-  
   state = {tripsList: []}
-
   componentDidMount() {
     this.storeList()
   }
   storeList = () => {
-    const{tripsList} = this.state
+    const {tripsList} = this.state
 
-    localStorage.setItem('tripsList',JSON.stringify(tripsList)) || []
+    //localStorage.setItem('tripsList', JSON.stringify(tripsList)) || []
   }
+
   addNewTrip = newTrip => {
     //this.setState(prevState => ({tripsList: [...prevState.tripsList, newTrip]}))
-    const storedList = JSON.parse(localStorage.getItem('tripsList')) || []
-  
-   storedList.push(newTrip)
-    this.setState({tripsList:storedList},this.storeList)
+
+    this.setState(prevState => ({tripsList: [...prevState.tripsList, newTrip]}),() =>{
+      const {tripsList} = this.state 
+      localStorage.setItem('tripsList',JSON.stringify(tripsList))
+    })
+    const storedList = JSON.parse(localStorage.getItem('tripsList'))
+    this.setState({tripsList:storedList})
   }
 
   deleteTrip = id => {
